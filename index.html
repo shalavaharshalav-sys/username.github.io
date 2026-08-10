@@ -130,14 +130,43 @@ section + section::before{
 @media(max-width:860px){.nav{display:none}}
 
 /* hero */
-.hero{padding-top:clamp(52px,7vw,84px);padding-bottom:clamp(60px,8.5vw,104px);overflow:hidden}
-.hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(32px,5vw,64px);align-items:center}
-.hero-logo-wrap{position:relative;width:112px;margin-bottom:24px}
+.hero{
+  padding-top:clamp(52px,7vw,84px);padding-bottom:clamp(60px,8.5vw,104px);
+  overflow:hidden;position:relative;
+}
+/* receding grid floor, the main 3D cue */
+.hero::before{
+  content:"";position:absolute;inset-inline:-30%;bottom:-6%;height:62%;
+  z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(91,176,255,.20) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(91,176,255,.20) 1px,transparent 1px);
+  background-size:70px 70px;
+  transform:perspective(620px) rotateX(64deg);
+  transform-origin:bottom center;
+  -webkit-mask-image:linear-gradient(to top,rgba(0,0,0,.9) 0%,transparent 74%);
+  mask-image:linear-gradient(to top,rgba(0,0,0,.9) 0%,transparent 74%);
+}
+.hero-grid{
+  display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(32px,5vw,64px);
+  align-items:center;position:relative;z-index:1;perspective:1400px;
+}
+.hero-logo-wrap{position:relative;width:112px;margin-bottom:24px;perspective:700px}
 .hero-logo-wrap::after{
   content:"";position:absolute;inset:-26px;border-radius:50%;z-index:-1;
   background:radial-gradient(circle,rgba(91,176,255,.28),transparent 68%);
 }
-.hero-logo{width:112px;height:112px;border-radius:26px;border:1px solid rgba(255,255,255,.16)}
+.hero-logo{
+  width:112px;height:112px;border-radius:26px;
+  border:1px solid rgba(255,255,255,.16);
+  transform-style:preserve-3d;
+  box-shadow:0 22px 40px rgba(0,0,0,.55),0 0 0 1px rgba(91,176,255,.14);
+  animation:levitate 7s ease-in-out infinite;
+}
+@keyframes levitate{
+  0%,100%{transform:perspective(700px) translateY(0) rotateY(-7deg) rotateX(3deg)}
+  50%    {transform:perspective(700px) translateY(-10px) rotateY(7deg) rotateX(-2deg)}
+}
 h1{font-size:clamp(40px,5.8vw,68px);margin-bottom:20px;letter-spacing:-1.2px}
 h1 .grad{
   background:linear-gradient(96deg,#ffffff 8%,#a9d3ff 54%,#5bb0ff 100%);
@@ -172,15 +201,33 @@ h1 .grad{
   position:relative;
   background:var(--card);border:1px solid var(--line);
   border-radius:var(--radius);padding:clamp(24px,3vw,34px);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
-  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+  box-shadow:0 10px 24px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.07);
+  transform-style:preserve-3d;
+  transition:transform .32s cubic-bezier(.2,.7,.3,1),border-color .25s ease,box-shadow .32s ease;
 }
-.card.hoverable:hover{
-  transform:translateY(-4px);
-  border-color:rgba(91,176,255,.32);
-  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.1);
+/* specular sheen that only shows while the card is tilted */
+.card.hoverable::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,.16),transparent 42%);
+  opacity:0;transition:opacity .32s ease;
 }
-.hero .card{backdrop-filter:blur(12px);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.08)}
+@media (hover:hover){
+  .card.hoverable:hover{
+    transform:perspective(1100px) translateY(-8px) rotateX(5deg) rotateY(-6deg) scale(1.015);
+    border-color:rgba(91,176,255,.4);
+    box-shadow:0 34px 60px rgba(0,0,0,.55),0 0 0 1px rgba(91,176,255,.16),inset 0 1px 0 rgba(255,255,255,.12);
+  }
+  .card.hoverable:hover::after{opacity:1}
+  .card.hoverable:hover .ico,
+  .card.hoverable:hover .num{transform:translateZ(38px) scale(1.06)}
+}
+.hero .card{
+  backdrop-filter:blur(12px);
+  transform:perspective(1500px) rotateY(-7deg) rotateX(2deg);
+  box-shadow:-32px 34px 66px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.09);
+}
+.hero .card:hover{transform:perspective(1500px) rotateY(0deg) rotateX(0deg)}
+.grid-3,.grid-2,.steps{perspective:1300px}
 .card h2{font-size:26px}
 
 .list{list-style:none;margin:0;padding:0}
@@ -195,6 +242,8 @@ h1 .grad{
   font-size:19px;line-height:1;flex:none;
   width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
   background:rgba(255,255,255,.05);border:1px solid var(--line-soft);
+  box-shadow:0 4px 10px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.09);
+  transition:transform .32s cubic-bezier(.2,.7,.3,1);
 }
 .list strong{display:block;color:var(--text);font-size:17px;margin-bottom:3px}
 .list small{color:var(--muted);font-size:14.5px;line-height:1.55;display:block}
@@ -208,6 +257,8 @@ h1 .grad{
   display:grid;place-items:center;margin-bottom:18px;
   background:linear-gradient(180deg,rgba(91,176,255,.16),rgba(91,176,255,.05));
   border:1px solid rgba(91,176,255,.22);
+  box-shadow:0 8px 18px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.14);
+  transition:transform .32s cubic-bezier(.2,.7,.3,1);
 }
 
 /* steps */
@@ -217,6 +268,8 @@ h1 .grad{
   background:linear-gradient(180deg,rgba(91,176,255,.2),rgba(91,176,255,.06));
   border:1px solid rgba(91,176,255,.3);
   color:#d3e8ff;font-weight:800;font-size:19px;margin-bottom:18px;
+  box-shadow:0 8px 18px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.16);
+  transition:transform .32s cubic-bezier(.2,.7,.3,1);
 }
 .step h3{font-size:19.5px}
 .step p{color:var(--muted);font-size:15.5px;margin:0}
@@ -235,6 +288,7 @@ h1 .grad{
   font-size:clamp(52px,7.5vw,84px);font-weight:800;line-height:1;letter-spacing:-2px;
   background:linear-gradient(150deg,#ffffff 12%,#a9d3ff 62%,#5bb0ff 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 3px 0 rgba(30,70,120,.55)) drop-shadow(0 14px 26px rgba(0,0,0,.6));
 }
 .price-unit{font-size:clamp(19px,2.4vw,24px);font-weight:700;color:#dbe2e8}
 .price-vat{
@@ -286,15 +340,21 @@ footer{
   border:1px solid var(--line);opacity:.65;
 }
 
-/* scroll reveal, no JS and no breakage where unsupported */
+/* 3D scroll reveal, no JS and no breakage where unsupported.
+   Uses the individual translate/rotate properties so it never fights
+   the transform used by the hover tilt. */
+section > .wrap{perspective:1300px}
 @supports (animation-timeline:view()){
   @media (prefers-reduced-motion:no-preference){
     .reveal{
       animation:reveal linear both;
       animation-timeline:view();
-      animation-range:entry 4% cover 26%;
+      animation-range:entry 4% cover 28%;
     }
-    @keyframes reveal{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+    @keyframes reveal{
+      from{opacity:0;translate:0 34px;rotate:x 14deg;scale:.97}
+      to{opacity:1;translate:0 0;rotate:x 0deg;scale:1}
+    }
   }
 }
 
@@ -302,6 +362,9 @@ footer{
   .hero-grid,.grid-2,.price-box{grid-template-columns:1fr}
   .grid-3,.steps{grid-template-columns:1fr}
   .price-side{border-inline-start:0;border-top:1px solid var(--line)}
+  /* straighten the hero card once it is full width */
+  .hero .card{transform:none;box-shadow:0 24px 48px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.09)}
+  .hero::before{height:44%;background-size:56px 56px}
 }
 @media(max-width:640px){
   .hero-logo,.hero-logo-wrap{width:86px}
@@ -313,6 +376,8 @@ footer{
   html{scroll-behavior:auto}
   *{transition:none!important;animation:none!important}
   .btn:hover,.card.hoverable:hover{transform:none}
+  .hero-logo{transform:none}
+  .hero::before{display:none}
 }
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
 </style>
