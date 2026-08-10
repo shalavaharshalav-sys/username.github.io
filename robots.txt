@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://shalavaharshalav-sys.github.io/username.github.io/sitemap.xml
