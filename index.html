@@ -23,51 +23,82 @@
 <meta name="twitter:description" content="ליווי אונליין אישי בפרסום ממומן. 350 ₪ לשעה כולל מע״מ, בלי התחייבות.">
 <meta name="twitter:image" content="https://shalavaharshalav-sys.github.io/username.github.io/logo.jpg">
 
-<meta name="theme-color" content="#0b0c0d">
+<meta name="theme-color" content="#08090a">
 <link rel="icon" href="logo.jpg">
 <link rel="apple-touch-icon" href="logo.jpg">
+<link rel="preload" as="font" type="font/woff2" href="heebo-he.woff2" crossorigin>
 <link rel="preload" as="image" href="logo.jpg">
 
 <style>
+@font-face{
+  font-family:'Heebo';font-style:normal;font-weight:400 800;font-display:swap;
+  src:url(heebo-he.woff2) format('woff2');
+  unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F;
+}
+@font-face{
+  font-family:'Heebo';font-style:normal;font-weight:400 800;font-display:swap;
+  src:url(heebo-lat.woff2) format('woff2');
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
 :root{
-  --bg:#0b0c0d;
-  --bg-2:#111315;
-  --surface:rgba(255,255,255,.05);
-  --surface-2:rgba(255,255,255,.08);
-  --line:rgba(255,255,255,.11);
-  --line-soft:rgba(255,255,255,.07);
-  --text:#f4f6f8;
-  --muted:#a9b0b7;
+  --bg:#08090a;
+  --bg-2:#0e1012;
+  --line:rgba(255,255,255,.10);
+  --line-soft:rgba(255,255,255,.06);
+  --text:#f2f5f8;
+  --muted:#a4abb3;
   --accent:#5bb0ff;
-  --accent-soft:rgba(91,176,255,.14);
-  --radius:20px;
+  --accent-2:#8fc6ff;
+  --accent-soft:rgba(91,176,255,.13);
+  --radius:22px;
   --maxw:1120px;
+  --card:linear-gradient(180deg,rgba(255,255,255,.062),rgba(255,255,255,.026));
+  --shadow:0 20px 44px rgba(0,0,0,.42);
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Rubik,"Noto Sans Hebrew",Arial,sans-serif;
+  font-family:'Heebo',-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Hebrew",Arial,sans-serif;
   background:var(--bg);
   color:var(--text);
   line-height:1.65;
   -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
   overflow-x:hidden;
+}
+/* ambient background, sits behind everything */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(720px 520px at 82% -6%,rgba(91,176,255,.14),transparent 62%),
+    radial-gradient(620px 480px at 6% 32%,rgba(120,90,255,.09),transparent 60%),
+    radial-gradient(900px 700px at 50% 108%,rgba(91,176,255,.07),transparent 62%);
 }
 img{max-width:100%;display:block}
 a{color:inherit}
-h1,h2,h3{line-height:1.15;margin:0 0 14px;font-weight:800;letter-spacing:-.01em}
+h1,h2,h3{line-height:1.16;margin:0 0 14px;font-weight:800}
 p{margin:0 0 16px}
 
 .wrap{width:min(var(--maxw),100%);margin-inline:auto;padding-inline:20px}
-section{padding:clamp(56px,8vw,96px) 0;scroll-margin-top:80px}
-.eyebrow{
-  display:inline-block;padding:7px 15px;border-radius:999px;
-  background:var(--accent-soft);border:1px solid rgba(91,176,255,.28);
-  color:#bcdcff;font-size:14px;font-weight:600;margin-bottom:18px;
+section{padding:clamp(60px,8.5vw,104px) 0;scroll-margin-top:80px;position:relative}
+section + section::before{
+  content:"";position:absolute;inset-inline:0;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.11) 22%,rgba(255,255,255,.11) 78%,transparent);
 }
-.section-head{max-width:680px;margin-bottom:38px}
-.section-head h2{font-size:clamp(28px,4vw,40px)}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 15px;border-radius:999px;
+  background:var(--accent-soft);border:1px solid rgba(91,176,255,.26);
+  color:#c3e0ff;font-size:14px;font-weight:600;margin-bottom:18px;
+}
+.eyebrow::before{
+  content:"";width:6px;height:6px;border-radius:50%;
+  background:var(--accent);box-shadow:0 0 10px 1px rgba(91,176,255,.85);flex:none;
+}
+.section-head{max-width:680px;margin-bottom:40px}
+.section-head h2{font-size:clamp(28px,4vw,42px);letter-spacing:-.5px}
 .section-head p{color:var(--muted);font-size:18px;margin:0}
 
 .skip{position:absolute;right:-9999px;top:12px;background:#fff;color:#111;padding:10px 16px;border-radius:10px;z-index:200}
@@ -76,131 +107,194 @@ section{padding:clamp(56px,8vw,96px) 0;scroll-margin-top:80px}
 /* header */
 .site-header{
   position:sticky;top:0;z-index:100;
-  background:rgba(11,12,13,.82);
-  backdrop-filter:blur(14px);
+  background:rgba(8,9,10,.72);
+  backdrop-filter:blur(16px) saturate(140%);
   border-bottom:1px solid var(--line-soft);
 }
-.site-header .wrap{display:flex;align-items:center;gap:22px;height:64px}
+.site-header .wrap{display:flex;align-items:center;gap:22px;height:66px}
 .brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:16px;text-decoration:none;white-space:nowrap}
-.brand img{width:32px;height:32px;border-radius:9px}
-.nav{display:flex;gap:26px;margin-inline-start:auto;font-size:15px}
-.nav a{color:var(--muted);text-decoration:none;transition:color .18s}
+.brand img{width:34px;height:34px;border-radius:10px;border:1px solid var(--line)}
+.nav{display:flex;gap:28px;margin-inline-start:auto;font-size:15px}
+.nav a{
+  color:var(--muted);text-decoration:none;position:relative;
+  padding-block:4px;transition:color .18s;
+}
+.nav a::after{
+  content:"";position:absolute;inset-inline:0;bottom:0;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  transform:scaleX(0);transition:transform .22s ease;
+}
 .nav a:hover{color:var(--text)}
-@media(max-width:820px){.nav{display:none}}
+.nav a:hover::after{transform:scaleX(1)}
+@media(max-width:860px){.nav{display:none}}
 
 /* hero */
-.hero{
-  position:relative;
-  background:radial-gradient(1000px 620px at 75% 8%,#23282d 0%,#131517 42%,var(--bg) 100%);
-  padding-top:clamp(48px,7vw,80px);
-  padding-bottom:clamp(56px,8vw,96px);
-  overflow:hidden;
+.hero{padding-top:clamp(52px,7vw,84px);padding-bottom:clamp(60px,8.5vw,104px);overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.04fr .96fr;gap:clamp(32px,5vw,64px);align-items:center}
+.hero-logo-wrap{position:relative;width:112px;margin-bottom:24px}
+.hero-logo-wrap::after{
+  content:"";position:absolute;inset:-26px;border-radius:50%;z-index:-1;
+  background:radial-gradient(circle,rgba(91,176,255,.28),transparent 68%);
 }
-.hero::after{
-  content:"";position:absolute;inset-inline-start:-160px;bottom:-220px;
-  width:520px;height:520px;border-radius:50%;
-  background:radial-gradient(circle,rgba(91,176,255,.16),transparent 66%);
-  pointer-events:none;
-}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,64px);align-items:center;position:relative;z-index:1}
-.hero-logo{width:104px;height:104px;border-radius:24px;margin-bottom:22px;border:1px solid var(--line)}
-h1{font-size:clamp(38px,5.6vw,64px);margin-bottom:20px}
+.hero-logo{width:112px;height:112px;border-radius:26px;border:1px solid rgba(255,255,255,.16)}
+h1{font-size:clamp(40px,5.8vw,68px);margin-bottom:20px;letter-spacing:-1.2px}
 h1 .grad{
-  background:linear-gradient(100deg,#ffffff 12%,#8fc6ff 62%,#5bb0ff 100%);
+  background:linear-gradient(96deg,#ffffff 8%,#a9d3ff 54%,#5bb0ff 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
 .lead{font-size:clamp(17px,2vw,20px);color:var(--muted);max-width:560px}
 
-.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  padding:15px 26px;border-radius:13px;text-decoration:none;
+  padding:15px 28px;border-radius:14px;text-decoration:none;
   font-weight:700;font-size:16.5px;border:1px solid transparent;
-  transition:transform .16s ease,background .16s ease,border-color .16s ease;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease;
 }
 .btn:hover{transform:translateY(-2px)}
-.btn-light{background:#fff;color:#111}
-.btn-light:hover{background:#e9edf1}
-.btn-ghost{border-color:rgba(255,255,255,.22);color:var(--text);background:rgba(255,255,255,.04)}
+.btn-light{background:#fff;color:#0b0c0d;box-shadow:0 10px 26px rgba(255,255,255,.13)}
+.btn-light:hover{background:#e8edf2;box-shadow:0 14px 32px rgba(255,255,255,.18)}
+.btn-ghost{border-color:rgba(255,255,255,.2);color:var(--text);background:rgba(255,255,255,.045)}
 .btn-ghost:hover{background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.34)}
 
-.trust{display:flex;gap:20px;flex-wrap:wrap;margin-top:30px;font-size:14.5px;color:var(--muted)}
-.trust span{display:flex;align-items:center;gap:7px}
+.trust{display:flex;gap:10px;flex-wrap:wrap;margin-top:32px}
+.trust span{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 14px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.035);
+  font-size:14.5px;color:#c8ced4;
+}
 .tick{color:var(--accent);font-weight:800}
 
 /* cards */
 .card{
-  background:var(--surface);border:1px solid var(--line);
+  position:relative;
+  background:var(--card);border:1px solid var(--line);
   border-radius:var(--radius);padding:clamp(24px,3vw,34px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07);
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
 }
-.hero .card{backdrop-filter:blur(12px)}
+.card.hoverable:hover{
+  transform:translateY(-4px);
+  border-color:rgba(91,176,255,.32);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.1);
+}
+.hero .card{backdrop-filter:blur(12px);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.08)}
 .card h2{font-size:26px}
+
 .list{list-style:none;margin:0;padding:0}
 .list li{
-  display:flex;gap:13px;align-items:flex-start;
+  display:flex;gap:14px;align-items:flex-start;
   padding:16px 0;border-bottom:1px solid var(--line-soft);
   font-size:16.5px;color:#dfe3e7;
 }
 .list li:last-child{border-bottom:0;padding-bottom:0}
 .list li:first-child{padding-top:0}
-.list .ico{font-size:20px;line-height:1.3;flex:none}
-.list strong{display:block;color:var(--text);font-size:17px;margin-bottom:2px}
+.list .ico{
+  font-size:19px;line-height:1;flex:none;
+  width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:rgba(255,255,255,.05);border:1px solid var(--line-soft);
+}
+.list strong{display:block;color:var(--text);font-size:17px;margin-bottom:3px}
 .list small{color:var(--muted);font-size:14.5px;line-height:1.55;display:block}
 
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.mini h3{font-size:19px;margin-bottom:8px}
+.mini h3{font-size:19.5px;margin-bottom:9px}
 .mini p{color:var(--muted);font-size:15.5px;margin:0}
-.mini .ico{font-size:26px;display:block;margin-bottom:14px}
+.mini .ico{
+  font-size:24px;width:52px;height:52px;border-radius:15px;
+  display:grid;place-items:center;margin-bottom:18px;
+  background:linear-gradient(180deg,rgba(91,176,255,.16),rgba(91,176,255,.05));
+  border:1px solid rgba(91,176,255,.22);
+}
 
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .step .num{
-  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
-  background:var(--accent-soft);border:1px solid rgba(91,176,255,.3);
-  color:#bcdcff;font-weight:800;font-size:18px;margin-bottom:16px;
+  width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+  background:linear-gradient(180deg,rgba(91,176,255,.2),rgba(91,176,255,.06));
+  border:1px solid rgba(91,176,255,.3);
+  color:#d3e8ff;font-weight:800;font-size:19px;margin-bottom:18px;
 }
-.step h3{font-size:19px}
+.step h3{font-size:19.5px}
 .step p{color:var(--muted);font-size:15.5px;margin:0}
 
 /* pricing */
-.price-box{display:grid;grid-template-columns:1.15fr .85fr;gap:0;overflow:hidden;padding:0}
-.price-main{padding:clamp(26px,3.4vw,38px)}
+.price-box{display:grid;grid-template-columns:1.12fr .88fr;gap:0;overflow:hidden;padding:0}
+.price-main{padding:clamp(26px,3.4vw,40px)}
 .price-side{
-  padding:clamp(26px,3.4vw,38px);
-  background:rgba(91,176,255,.07);
+  padding:clamp(26px,3.4vw,40px);
+  background:linear-gradient(180deg,rgba(91,176,255,.09),rgba(91,176,255,.03));
   border-inline-start:1px solid var(--line);
   display:flex;flex-direction:column;justify-content:center;
 }
-.price-tag{font-size:clamp(28px,3.6vw,40px);font-weight:800;margin-bottom:6px}
-.price-tag em{font-style:normal;font-size:17px;color:var(--muted);font-weight:600}
+.price-tag{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.price-num{
+  font-size:clamp(52px,7.5vw,84px);font-weight:800;line-height:1;letter-spacing:-2px;
+  background:linear-gradient(150deg,#ffffff 12%,#a9d3ff 62%,#5bb0ff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.price-unit{font-size:clamp(19px,2.4vw,24px);font-weight:700;color:#dbe2e8}
+.price-vat{
+  font-size:14px;font-weight:600;color:#bcdcff;
+  padding:5px 12px;border-radius:999px;
+  background:var(--accent-soft);border:1px solid rgba(91,176,255,.26);
+}
 
 /* faq */
 details{
-  border:1px solid var(--line);border-radius:14px;
-  padding:18px 20px;margin-bottom:12px;background:var(--surface);
+  border:1px solid var(--line);border-radius:16px;
+  padding:18px 22px;margin-bottom:12px;
+  background:var(--card);
+  transition:border-color .18s ease,background .18s ease;
 }
-details[open]{background:var(--surface-2)}
+details:hover{border-color:rgba(255,255,255,.19)}
+details[open]{border-color:rgba(91,176,255,.3)}
 summary{
   cursor:pointer;font-weight:700;font-size:17px;list-style:none;
   display:flex;justify-content:space-between;align-items:center;gap:16px;
 }
 summary::-webkit-details-marker{display:none}
-summary::after{content:"+";color:var(--accent);font-size:24px;font-weight:400;flex:none;line-height:1}
-details[open] summary::after{content:"\2212"}
+summary::after{
+  content:"";flex:none;width:26px;height:26px;border-radius:9px;
+  border:1px solid var(--line);
+  background:
+    linear-gradient(var(--accent),var(--accent)) center/11px 2px no-repeat,
+    linear-gradient(var(--accent),var(--accent)) center/2px 11px no-repeat;
+  transition:transform .22s ease,border-color .18s ease;
+}
+details[open] summary::after{transform:rotate(135deg);border-color:rgba(91,176,255,.5)}
 details p{color:var(--muted);margin:14px 0 0;font-size:16px}
 
 /* next steps */
-#next{background:linear-gradient(180deg,var(--bg) 0%,var(--bg-2) 100%)}
 .next-note{
-  margin-top:20px;padding:18px 22px;border-radius:14px;
-  background:var(--accent-soft);border:1px solid rgba(91,176,255,.28);
+  margin-top:22px;padding:20px 24px;border-radius:16px;
+  background:linear-gradient(180deg,rgba(91,176,255,.13),rgba(91,176,255,.05));
+  border:1px solid rgba(91,176,255,.26);
   color:#cfe4fb;font-size:16px;
 }
+.next-note a{color:#fff;text-decoration:underline;text-underline-offset:3px}
 
 footer{
   border-top:1px solid var(--line-soft);
-  padding:30px 0;text-align:center;color:#767c82;font-size:14.5px;
+  padding:34px 0;text-align:center;color:#6f767d;font-size:14.5px;
+}
+.footer-mark{
+  width:30px;height:30px;border-radius:9px;margin:0 auto 14px;
+  border:1px solid var(--line);opacity:.65;
+}
+
+/* scroll reveal, no JS and no breakage where unsupported */
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .reveal{
+      animation:reveal linear both;
+      animation-timeline:view();
+      animation-range:entry 4% cover 26%;
+    }
+    @keyframes reveal{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+  }
 }
 
 @media(max-width:900px){
@@ -209,15 +303,17 @@ footer{
   .price-side{border-inline-start:0;border-top:1px solid var(--line)}
 }
 @media(max-width:640px){
-  .hero-logo{width:80px;height:80px}
+  .hero-logo,.hero-logo-wrap{width:86px}
+  .hero-logo{height:86px;border-radius:22px}
+  h1{letter-spacing:-.6px}
   .btn{width:100%}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *{transition:none!important;animation:none!important}
-  .btn:hover{transform:none}
+  .btn:hover,.card.hoverable:hover{transform:none}
 }
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
 </style>
 </head>
 <body>
@@ -227,7 +323,7 @@ footer{
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="#top">
-      <img src="logo.jpg" alt="" width="32" height="32">
+      <img src="logo.jpg" alt="" width="34" height="34">
       <span>שליטה בקידום ממומן</span>
     </a>
     <nav class="nav" aria-label="ניווט ראשי">
@@ -245,7 +341,9 @@ footer{
 <section class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <img class="hero-logo" src="logo.jpg" alt="שליטה בקידום ממומן" width="104" height="104">
+      <div class="hero-logo-wrap">
+        <img class="hero-logo" src="logo.jpg" alt="שליטה בקידום ממומן" width="112" height="112">
+      </div>
       <div class="eyebrow">ליווי מקצועי לבעלי עסקים</div>
       <h1>מפסיקים לנחש<br><span class="grad">בפרסום הממומן</span></h1>
       <p class="lead">ליווי אישי ואונליין לבעלי עסקים שרוצים להבין לאן הולך הכסף, לנהל קמפיינים בצורה נכונה ולראות תוצאות שאפשר למדוד. בלי ז'רגון, בלי חוזים ארוכים.</p>
@@ -285,23 +383,23 @@ footer{
 
 <section id="who">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">למי זה מתאים</div>
       <h2>אם אחד מהמשפטים האלה נשמע מוכר, זה בשבילכם</h2>
       <p>הליווי בנוי לבעלי עסקים קטנים ובינוניים שכבר מפרסמים או עומדים להתחיל, ורוצים שליטה אמיתית במה שקורה.</p>
     </div>
     <div class="grid-3">
-      <div class="card mini">
+      <div class="card mini hoverable reveal">
         <span class="ico" aria-hidden="true">🔥</span>
         <h3>"שורף תקציב ולא רואה תוצאות"</h3>
         <p>הקמפיין רץ, הכסף יורד, והלידים לא מגיעים או לא איכותיים. נאתר איפה בדיוק נשבר התהליך ונתקן.</p>
       </div>
-      <div class="card mini">
+      <div class="card mini hoverable reveal">
         <span class="ico" aria-hidden="true">🤝</span>
         <h3>"תלוי לגמרי בפרילנסר"</h3>
         <p>מישהו מנהל לכם את הפרסום ואתם לא באמת מבינים מה הוא עושה. תלמדו לקרוא את החשבון בעצמכם.</p>
       </div>
-      <div class="card mini">
+      <div class="card mini hoverable reveal">
         <span class="ico" aria-hidden="true">🚀</span>
         <h3>"רוצה להתחיל נכון"</h3>
         <p>עוד לא פרסמתם ואתם לא רוצים לשרוף חודשיים על ניסוי וטעייה. נבנה מבנה נכון מהיום הראשון.</p>
@@ -312,23 +410,23 @@ footer{
 
 <section id="how">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">התהליך</div>
       <h2>איך זה עובד</h2>
       <p>שלושה שלבים פשוטים, בלי בירוקרטיה ובלי הפתעות.</p>
     </div>
     <div class="steps">
-      <div class="card step">
+      <div class="card step hoverable reveal">
         <div class="num">1</div>
         <h3>שיחת התאמה</h3>
         <p>שיחה קצרה שבה מבינים מה המצב, מה המטרה, ואם הליווי בכלל מתאים לכם. ללא עלות.</p>
       </div>
-      <div class="card step">
+      <div class="card step hoverable reveal">
         <div class="num">2</div>
         <h3>אבחון וחיבור לנתונים</h3>
         <p>עוברים יחד על החשבון הקיים, על הקמפיינים ועל המספרים, ומסמנים את שלוש הנקודות שישנו הכי הרבה.</p>
       </div>
-      <div class="card step">
+      <div class="card step hoverable reveal">
         <div class="num">3</div>
         <h3>ליווי שוטף</h3>
         <p>נפגשים אונליין לפי הצורך. מיישמים, מודדים, משפרים. אתם מחליטים כמה שעות ומתי.</p>
@@ -339,28 +437,28 @@ footer{
 
 <section id="principles">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">איך אני עובד</div>
       <h2>ארבעה עקרונות שלא זזים</h2>
       <p>אלה הכללים שלפיהם הליווי מתנהל, גם כשהם לא נוחים לי.</p>
     </div>
     <div class="grid-2">
-      <div class="card mini">
+      <div class="card mini hoverable reveal">
         <span class="ico" aria-hidden="true">🔓</span>
         <h3>הנכסים תמיד שלכם</h3>
         <p>חשבון הפרסום, הפיקסל, העמוד והנתונים רשומים על שמכם. אם נפרדים, הכל נשאר אצלכם ואתם לא צריכים לבקש ממני כלום.</p>
       </div>
-      <div class="card mini">
+      <div class="card mini hoverable reveal">
         <span class="ico" aria-hidden="true">🚫</span>
         <h3>בלי הבטחות למספרים</h3>
         <p>אף אחד לא יכול להתחייב מראש לעלות לליד או לכמות פניות. מי שמבטיח, מוכר לכם סיפור. אני אגיד לכם מה סביר ומה לא.</p>
       </div>
-      <div class="card mini">
+      <div class="card mini hoverable reveal">
         <span class="ico" aria-hidden="true">📝</span>
         <h3>הכל כתוב</h3>
         <p>אחרי כל פגישה מגיע סיכום קצר: מה סוכם, מה המשימות ומי אחראי על מה. בלי "אמרנו" ו"לא אמרנו".</p>
       </div>
-      <div class="card mini">
+      <div class="card mini hoverable reveal">
         <span class="ico" aria-hidden="true">✋</span>
         <h3>אגיד לכם גם כשלא כדאי</h3>
         <p>אם התקציב קטן מדי, אם הערוץ לא מתאים לעסק, או אם אתם פשוט לא צריכים ליווי כרגע, תשמעו את זה ממני ישירות.</p>
@@ -371,14 +469,18 @@ footer{
 
 <section id="price">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">שקיפות מלאה</div>
       <h2>כמה זה עולה</h2>
       <p>המחיר כתוב כאן ולא נסגר בשיחת מכירה. בלי חבילות מנופחות ובלי אותיות קטנות.</p>
     </div>
-    <div class="card price-box">
+    <div class="card price-box reveal">
       <div class="price-main">
-        <div class="price-tag">350 ₪ לשעה <em>כולל מע"מ</em></div>
+        <div class="price-tag">
+          <span class="price-num">350&nbsp;₪</span>
+          <span class="price-unit">לשעה</span>
+          <span class="price-vat">כולל מע"מ</span>
+        </div>
         <p style="color:var(--muted)">מחיר אחד, ברור, בלי מדרגות ובלי תוספות. משלמים רק על שעות עבודה בפועל: אין דמי ניהול חודשיים, אין תקופת התחייבות ואפשר לעצור בכל שלב. את מספר השעות אתם קובעים, ואפשר לשנות אותו מחודש לחודש.</p>
         <ul class="list" style="margin-top:6px">
           <li><span class="ico tick" aria-hidden="true">✓</span><div><strong>שיחת התאמה ראשונה ללא עלות</strong></div></li>
@@ -388,7 +490,7 @@ footer{
         </ul>
       </div>
       <div class="price-side">
-        <h3 style="font-size:20px">כמה זה עולה לכם באמת</h3>
+        <h3 style="font-size:21px">כמה זה עולה לכם באמת</h3>
         <p style="color:var(--muted);font-size:15.5px;margin:0 0 14px">ה־350 ₪ כוללים כבר את המע"מ, ואתם מקבלים חשבונית מס. עסק מורשה מקזז את המע"מ ומכיר בסכום כהוצאה מוכרת, כך שהעלות האפקטיבית נמוכה מהמספר שכתוב כאן.</p>
         <p style="color:var(--muted);font-size:14px;margin:0">הסכום המדויק שתחזירו תלוי בסטטוס ובשיעור המס שלכם, אז שווה לוודא מול רואה החשבון שלכם.</p>
       </div>
@@ -398,40 +500,40 @@ footer{
 
 <section id="faq">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">שאלות נפוצות</div>
       <h2>מה שבדרך כלל שואלים</h2>
     </div>
-    <div style="max-width:820px">
-      <details>
+    <div style="max-width:840px">
+      <details class="reveal">
         <summary>אני צריך להעביר לך את הגישה לחשבון הפרסום?</summary>
         <p>לא חובה. אפשר לעבוד בשיתוף מסך שבו אתם מבצעים והמסך שלכם מוביל, ואפשר גם לקבל הרשאת שותף מוגבלת אם נוח לכם יותר. בכל מקרה החשבון והנכסים נשארים רשומים על שמכם.</p>
       </details>
-      <details>
+      <details class="reveal">
         <summary>כמה שעות בחודש צריך בדרך כלל?</summary>
         <p>זה תלוי בהיקף ובוותק של החשבון. עסק שמתחיל צריך יותר שעות בהתחלה כדי לבנות מבנה נכון, ואחר כך פחות. את ההיקף המדויק נקבע יחד בשיחת ההתאמה, ואפשר לשנות אותו בכל חודש.</p>
       </details>
-      <details>
+      <details class="reveal">
         <summary>אתם עובדים עם פייסבוק, אינסטגרם וגם גוגל?</summary>
         <p>כן. הליווי מתייחס לערוצים שרלוונטיים לעסק שלכם, כולל מטא (פייסבוק ואינסטגרם) וגוגל. חלק מהעבודה היא דווקא להחליט באיזה ערוץ לא כדאי לכם להשקיע כרגע.</p>
       </details>
-      <details>
+      <details class="reveal">
         <summary>תוך כמה זמן רואים שינוי?</summary>
         <p>תיקונים טכניים בחשבון, כמו מבנה קמפיינים או מדידה שבורה, מרגישים תוך ימים. שינוי אמיתי בעלות לליד דורש בדרך כלל כמה שבועות של נתונים. אף אחד לא יכול להבטיח מספר מראש, ומי שמבטיח כדאי לבדוק אותו טוב.</p>
       </details>
-      <details>
+      <details class="reveal">
         <summary>מקבלים חשבונית? המחיר כולל מע"מ?</summary>
         <p>כן לשתי השאלות. 350 ₪ לשעה זה המחיר הסופי כולל מע"מ, ועל כל תשלום מונפקת חשבונית מס. עסק מורשה יכול לקזז את המע"מ ולהכיר בתשלום כהוצאה מוכרת, כך שבפועל העלות נמוכה מ־350 ₪.</p>
       </details>
-      <details>
+      <details class="reveal">
         <summary>אפשר להפסיק באמצע?</summary>
         <p>כן, בכל רגע. אין חוזה התחייבות ואין קנס יציאה. משלמים על השעות שכבר בוצעו וזהו.</p>
       </details>
-      <details>
+      <details class="reveal">
         <summary>איפה מתקיימות הפגישות?</summary>
         <p>הכל אונליין, בזום או בגוגל מיט, עם שיתוף מסך. אין צורך להגיע לשום מקום ואפשר להתאים את השעות גם אחרי יום עבודה.</p>
       </details>
-      <details>
+      <details class="reveal">
         <summary>אני עסק קטן מאוד, זה רלוונטי לי?</summary>
         <p>תלוי בתקציב הפרסום. מתחת לרף מסוים הפלטפורמות פשוט לא מקבלות מספיק נתונים כדי ללמוד, ואז ליווי לא יעזור. בשיחת ההתאמה אגיד לכם בכנות אם אתם מתחת לרף הזה.</p>
       </details>
@@ -441,30 +543,30 @@ footer{
 
 <section id="next">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <div class="eyebrow">מה קורה עכשיו</div>
       <h2>השארתם פרטים, מה הלאה?</h2>
       <p>אין כאן טופס ואין מה למלא שוב. הפרטים שלכם כבר אצלי, וזה סדר הדברים מכאן.</p>
     </div>
     <div class="steps">
-      <div class="card step">
+      <div class="card step hoverable reveal">
         <div class="num">1</div>
         <h3>חוזרים אליכם</h3>
         <p>תוך יום עסקים אחד, בימים א' עד ה'. פנייה שמגיעה בסוף השבוע נענית ביום ראשון.</p>
       </div>
-      <div class="card step">
+      <div class="card step hoverable reveal">
         <div class="num">2</div>
         <h3>שיחה קצרה</h3>
         <p>כרבע שעה כדי להבין מה המצב, מה המטרה ומה התקציב. ללא עלות וללא התחייבות.</p>
       </div>
-      <div class="card step">
+      <div class="card step hoverable reveal">
         <div class="num">3</div>
         <h3>מחליטים</h3>
         <p>אם זה מתאים, קובעים איך מתחילים. אם לא, אגיד לכם את זה ישירות ונפרדים בידידות.</p>
       </div>
     </div>
-    <div class="next-note">
-      בינתיים שווה לעבור על <a href="#faq" style="color:#fff">השאלות הנפוצות</a> ועל <a href="#principles" style="color:#fff">עקרונות העבודה</a>. ככל שתגיעו לשיחה עם יותר רקע, כך היא תהיה קצרה ומועילה יותר.
+    <div class="next-note reveal">
+      בינתיים שווה לעבור על <a href="#faq">השאלות הנפוצות</a> ועל <a href="#principles">עקרונות העבודה</a>. ככל שתגיעו לשיחה עם יותר רקע, כך היא תהיה קצרה ומועילה יותר.
     </div>
   </div>
 </section>
@@ -473,7 +575,8 @@ footer{
 
 <footer>
   <div class="wrap">
-    <p style="margin:0">שליטה בקידום ממומן | ליווי אונליין, תשלום לפי שעה, בלי התחייבות</p>
+    <img class="footer-mark" src="logo.jpg" alt="" width="30" height="30">
+    <p style="margin:0">שליטה בקידום ממומן | ליווי אונליין, 350 ₪ לשעה כולל מע"מ, בלי התחייבות</p>
   </div>
 </footer>
 
