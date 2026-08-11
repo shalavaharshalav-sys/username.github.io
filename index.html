@@ -311,6 +311,57 @@ h1 .grad{
 .step h3{font-size:19.5px}
 .step p{color:var(--muted);font-size:15.5px;margin:0}
 
+/* calculator. Collects nothing and sends nothing: every value stays in
+   the visitor's browser. This is deliberately not a <form>. */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;overflow:hidden}
+.calc-in{padding:clamp(24px,3.2vw,36px)}
+.calc-out{
+  padding:clamp(24px,3.2vw,36px);
+  background:linear-gradient(180deg,rgba(91,176,255,.11),rgba(91,176,255,.03));
+  border-inline-start:1px solid var(--line);
+  display:flex;flex-direction:column;justify-content:center;
+}
+.field{margin-bottom:18px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:14.5px;font-weight:600;margin-bottom:7px;color:#d3d8dd}
+.field .wrapin{position:relative}
+.field input{
+  width:100%;padding:13px 15px;border-radius:12px;
+  background:rgba(0,0,0,.34);border:1px solid var(--line);
+  color:var(--text);font-size:17px;font-family:inherit;font-weight:700;
+  transition:border-color .18s,box-shadow .18s;
+}
+.field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.field input[type=number]{-moz-appearance:textfield}
+.field .unit{
+  position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);
+  color:#8d949b;font-size:15px;font-weight:600;pointer-events:none;
+}
+.field input.hasunit{padding-inline-end:38px}
+
+.res-main{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px}
+.res-big .k{font-size:14px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.res-big .v{
+  font-size:clamp(30px,4vw,42px);font-weight:800;line-height:1.05;white-space:nowrap;
+  background:linear-gradient(150deg,#ffffff 10%,#a9d3ff 60%,#5bb0ff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 0 rgba(30,70,120,.5));
+}
+.res-rows{border-top:1px solid var(--line-soft);padding-top:14px}
+.res-rows div{
+  display:flex;justify-content:space-between;gap:14px;
+  padding:8px 0;font-size:15.5px;color:var(--muted);
+}
+.res-rows div b{color:var(--text);font-weight:700}
+.verdict{
+  margin-top:18px;padding:14px 18px;border-radius:14px;font-size:15.5px;line-height:1.5;
+  border:1px solid rgba(91,176,255,.3);background:rgba(91,176,255,.1);color:#cfe4fb;
+}
+.verdict.warn{border-color:rgba(255,176,91,.34);background:rgba(255,176,91,.1);color:#ffd9ac}
+.verdict.bad{border-color:rgba(255,110,110,.34);background:rgba(255,110,110,.1);color:#ffc4c4}
+.calc-note{font-size:13.5px;color:#8d949b;margin:16px 0 0;line-height:1.55}
+
 /* comparison */
 .compare{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;perspective:1400px;align-items:stretch}
 .col{display:flex;flex-direction:column}
@@ -451,7 +502,8 @@ section > .wrap{perspective:1300px}
 
 @media(max-width:900px){
   .hero-grid,.grid-2,.price-box{grid-template-columns:1fr}
-  .grid-3,.steps,.compare{grid-template-columns:1fr}
+  .grid-3,.steps,.compare,.calc{grid-template-columns:1fr}
+  .calc-out{border-inline-start:0;border-top:1px solid var(--line)}
   .col.featured{transform:none}
   .price-side{border-inline-start:0;border-top:1px solid var(--line)}
   /* straighten the hero card once it is full width */
@@ -488,6 +540,7 @@ section > .wrap{perspective:1300px}
     </a>
     <nav class="nav" aria-label="ניווט ראשי">
       <a href="#services">מה כולל</a>
+      <a href="#calc">מחשבון</a>
       <a href="#how">איך זה עובד</a>
       <a href="#principles">עקרונות</a>
       <a href="#compare">השוואה</a>
@@ -566,6 +619,69 @@ section > .wrap{perspective:1300px}
         <p>עוד לא פרסמתם ואתם לא רוצים לשרוף חודשיים על ניסוי וטעייה. נבנה מבנה נכון מהיום הראשון.</p>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="calc" aria-labelledby="h-calc">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">כלי חינמי</div>
+      <h2 id="h-calc">כמה הפרסום שלכם באמת מחזיר?</h2>
+      <p>ארבעה מספרים שאתם כבר יודעים, ובלי לחשוב תגלו כמה עולה לכם ליד, כמה עולה לכם לקוח, והאם הפרסום שלכם רווחי או שורף.</p>
+    </div>
+
+    <div class="card calc reveal">
+      <div class="calc-in">
+        <div class="field">
+          <label for="c-budget">תקציב פרסום חודשי</label>
+          <div class="wrapin">
+            <input id="c-budget" class="hasunit" type="number" inputmode="numeric" min="0" step="100" value="5000">
+            <span class="unit">₪</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="c-leads">כמה פניות מגיעות בחודש</label>
+          <div class="wrapin">
+            <input id="c-leads" type="number" inputmode="numeric" min="0" step="1" value="40">
+          </div>
+        </div>
+        <div class="field">
+          <label for="c-close">מתוכן, כמה אחוז נסגרות</label>
+          <div class="wrapin">
+            <input id="c-close" class="hasunit" type="number" inputmode="numeric" min="0" max="100" step="1" value="20">
+            <span class="unit">%</span>
+          </div>
+        </div>
+        <div class="field">
+          <label for="c-value">שווי עסקה ממוצעת</label>
+          <div class="wrapin">
+            <input id="c-value" class="hasunit" type="number" inputmode="numeric" min="0" step="100" value="1500">
+            <span class="unit">₪</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-out">
+        <div class="res-main">
+          <div class="res-big">
+            <div class="k">עלות לפנייה</div>
+            <div class="v" id="r-cpl">125 ₪</div>
+          </div>
+          <div class="res-big">
+            <div class="k">עלות ללקוח</div>
+            <div class="v" id="r-cac">625 ₪</div>
+          </div>
+        </div>
+        <div class="res-rows">
+          <div><span>לקוחות חדשים בחודש</span><b id="r-cust">8</b></div>
+          <div><span>הכנסה שמיוחסת לפרסום</span><b id="r-rev">12,000 ₪</b></div>
+          <div><span>על כל שקל שהשקעתם חוזרים</span><b id="r-roas">2.4 ₪</b></div>
+        </div>
+        <div class="verdict" id="r-verdict" role="status">הפרסום רווחי. השאלה עכשיו היא כמה אפשר להגדיל בלי לשבור את היחס הזה.</div>
+      </div>
+    </div>
+
+    <p class="calc-note">החישוב מסתכל על הפרסום בלבד ולא מביא בחשבון עלויות ייצור, שכר או ביטולים, אז הוא מראה תמונה ולא שורה תחתונה. <b>שום נתון לא נשמר ולא נשלח לשום מקום</b>, הכל מחושב אצלכם בדפדפן ונעלם ברגע שתסגרו את הדף.</p>
   </div>
 </section>
 
@@ -808,6 +924,63 @@ section > .wrap{perspective:1300px}
       s.removeProperty('--mx'); s.removeProperty('--my');
     }, {passive:true});
   });
+})();
+
+/* Advertising return calculator. Nothing is stored and nothing leaves
+   the browser: the four values are read, divided, printed, forgotten.
+   This is not a lead form and must never become one. */
+(function(){
+  var el = function(id){ return document.getElementById(id); };
+  var inputs = ['c-budget','c-leads','c-close','c-value'].map(el);
+  var out = {
+    cpl: el('r-cpl'), cac: el('r-cac'), cust: el('r-cust'),
+    rev: el('r-rev'), roas: el('r-roas'), verdict: el('r-verdict')
+  };
+  if(inputs.some(function(i){ return !i; }) || !out.verdict) return;
+
+  var shekel = function(n){ return Math.round(n).toLocaleString('he-IL') + ' ₪'; };
+  var num = function(i, max){
+    var v = parseFloat(i.value);
+    if(!isFinite(v) || v < 0) v = 0;
+    return max !== undefined ? Math.min(v, max) : v;
+  };
+
+  function recalc(){
+    var budget = num(inputs[0]),
+        leads  = num(inputs[1]),
+        close  = num(inputs[2], 100) / 100,
+        value  = num(inputs[3]);
+
+    var customers = leads * close,
+        revenue   = customers * value,
+        roas      = budget > 0 ? revenue / budget : 0;
+
+    out.cpl.textContent  = (budget > 0 && leads > 0) ? shekel(budget / leads) : 'חסר נתון';
+    out.cac.textContent  = (budget > 0 && customers > 0) ? shekel(budget / customers) : 'חסר נתון';
+    out.cust.textContent = customers.toLocaleString('he-IL', {maximumFractionDigits:1});
+    out.rev.textContent  = shekel(revenue);
+    out.roas.textContent = budget > 0 ? roas.toFixed(1) + ' ₪' : 'חסר נתון';
+
+    var v = out.verdict, cls = '', txt;
+    if(budget <= 0 || leads <= 0 || value <= 0){
+      txt = 'מלאו את ארבעת השדות כדי לראות את התמונה.';
+    } else if(roas < 1){
+      cls = 'bad';
+      txt = 'כרגע הפרסום מחזיר פחות ממה שהוא עולה, כלומר כל שקל נוסף מגדיל את ההפסד. זה כמעט תמיד בעיה של מיקוד או של מדידה, ולא של תקציב.';
+    } else if(roas < 2){
+      cls = 'warn';
+      txt = 'אתם בערך מכסים את עלות הפרסום, בלי מרווח אמיתי. במצב כזה שיפור קטן באחוז הסגירה או בעלות לפנייה משנה את כל התמונה.';
+    } else if(roas < 4){
+      txt = 'הפרסום רווחי. השאלה עכשיו היא כמה אפשר להגדיל בלי לשבור את היחס הזה.';
+    } else {
+      txt = 'יחס גבוה מאוד. אם הוא יציב לאורך זמן, סביר שאתם מתקצבים בזהירות יתר ומשאירים לקוחות אצל המתחרים.';
+    }
+    v.className = 'verdict' + (cls ? ' ' + cls : '');
+    v.textContent = txt;
+  }
+
+  inputs.forEach(function(i){ i.addEventListener('input', recalc); });
+  recalc();
 })();
 </script>
 
