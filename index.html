@@ -130,7 +130,37 @@ section + section::before{
 }
 .nav a:hover{color:var(--text)}
 .nav a:hover::after{transform:scaleX(1)}
-@media(max-width:860px){.nav{display:none}}
+/* below 860 the nav becomes a scrollable strip of chips instead of
+   disappearing, which left eight sections with no navigation at all */
+@media(max-width:860px){
+  .site-header .wrap{height:auto;flex-wrap:wrap;padding-block:10px;gap:10px}
+  .brand{font-size:15px}
+  .nav{
+    order:2;width:100%;margin-inline-start:0;gap:8px;
+    overflow-x:auto;overscroll-behavior-x:contain;
+    scrollbar-width:none;-ms-overflow-style:none;
+    padding-bottom:1px;
+  }
+  .nav::-webkit-scrollbar{display:none}
+  .nav a{
+    flex:none;padding:7px 14px;border-radius:999px;font-size:14px;
+    border:1px solid var(--line);background:rgba(255,255,255,.045);
+    color:#cdd3d9;padding-block:7px;white-space:nowrap;
+  }
+  .nav a::after{display:none}
+  section{scroll-margin-top:124px}
+}
+
+/* reading progress, grows right to left with the scroll */
+.progress{
+  position:fixed;top:0;inset-inline:0;height:3px;z-index:150;
+  background:linear-gradient(90deg,var(--accent-2),var(--accent));
+  transform-origin:100% 50%;scale:0 1;pointer-events:none;
+}
+@supports (animation-timeline:scroll()){
+  .progress{animation:readProgress linear both;animation-timeline:scroll(root)}
+  @keyframes readProgress{from{scale:0 1}to{scale:1 1}}
+}
 
 /* hero */
 .hero{
@@ -445,6 +475,8 @@ section > .wrap{perspective:1300px}
 </style>
 </head>
 <body>
+
+<div class="progress" aria-hidden="true"></div>
 
 <a class="skip" href="#main">דילוג לתוכן הראשי</a>
 
