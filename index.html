@@ -205,17 +205,21 @@ h1 .grad{
   transform-style:preserve-3d;
   transition:transform .32s cubic-bezier(.2,.7,.3,1),border-color .25s ease,box-shadow .32s ease;
 }
-/* specular sheen that only shows while the card is tilted */
+/* glare that tracks the pointer across the card face.
+   --mx/--my are set by the tilt script; without it the highlight
+   simply sits in the top corner and the card still tilts. */
 .card.hoverable::after{
   content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-  background:linear-gradient(135deg,rgba(255,255,255,.16),transparent 42%);
-  opacity:0;transition:opacity .32s ease;
+  background:radial-gradient(420px circle at var(--mx,18%) var(--my,10%),rgba(255,255,255,.17),transparent 46%);
+  opacity:0;transition:opacity .3s ease;
 }
 @media (hover:hover){
   .card.hoverable:hover{
-    transform:perspective(1100px) translateY(-8px) rotateX(5deg) rotateY(-6deg) scale(1.015);
+    transform:perspective(1100px) translateY(-8px)
+              rotateX(var(--rx,5deg)) rotateY(var(--ry,-6deg)) scale(1.015);
     border-color:rgba(91,176,255,.4);
     box-shadow:0 34px 60px rgba(0,0,0,.55),0 0 0 1px rgba(91,176,255,.16),inset 0 1px 0 rgba(255,255,255,.12);
+    transition:transform .09s linear,border-color .25s ease,box-shadow .3s ease;
   }
   .card.hoverable:hover::after{opacity:1}
   .card.hoverable:hover .ico,
@@ -273,6 +277,48 @@ h1 .grad{
 }
 .step h3{font-size:19.5px}
 .step p{color:var(--muted);font-size:15.5px;margin:0}
+
+/* comparison */
+.compare{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;perspective:1400px;align-items:stretch}
+.col{display:flex;flex-direction:column}
+.col.featured{
+  border-color:rgba(91,176,255,.42);
+  background:linear-gradient(180deg,rgba(91,176,255,.13),rgba(91,176,255,.035));
+  transform:translateZ(46px);
+  box-shadow:0 30px 60px rgba(0,0,0,.5),0 0 0 1px rgba(91,176,255,.2),inset 0 1px 0 rgba(255,255,255,.12);
+}
+/* keep the featured column's depth while it tilts, otherwise it drops
+   back into the row the moment you touch it */
+@media (hover:hover){
+  .col.featured:hover{
+    transform:perspective(1100px) translateZ(46px) translateY(-8px)
+              rotateX(var(--rx,5deg)) rotateY(var(--ry,-6deg));
+  }
+}
+.col-badge{
+  position:absolute;top:-13px;inset-inline-start:24px;
+  padding:5px 14px;border-radius:999px;font-size:13px;font-weight:700;
+  background:linear-gradient(180deg,#7cc0ff,#4a9ef0);color:#06243f;
+  box-shadow:0 8px 18px rgba(74,158,240,.4);
+}
+.col h3{font-size:20px;margin-bottom:6px}
+.col-cost{
+  font-size:15px;color:#bcdcff;font-weight:700;
+  padding-bottom:16px;margin-bottom:4px;border-bottom:1px solid var(--line-soft);
+}
+.col-list{list-style:none;margin:0;padding:0}
+.col-list li{
+  display:flex;gap:11px;align-items:flex-start;
+  padding:13px 0;font-size:15.5px;color:var(--muted);line-height:1.55;
+}
+.col-list li::before{
+  content:"✓";flex:none;width:22px;height:22px;border-radius:7px;
+  display:grid;place-items:center;font-size:12px;font-weight:800;margin-top:2px;
+  background:rgba(91,176,255,.16);color:#9fd0ff;border:1px solid rgba(91,176,255,.26);
+}
+.col-list li.minus::before{
+  content:"−";background:rgba(255,255,255,.05);color:#9aa1a8;border-color:var(--line-soft);
+}
 
 /* pricing */
 .price-box{display:grid;grid-template-columns:1.12fr .88fr;gap:0;overflow:hidden;padding:0}
@@ -355,12 +401,24 @@ section > .wrap{perspective:1300px}
       from{opacity:0;translate:0 34px;rotate:x 14deg;scale:.97}
       to{opacity:1;translate:0 0;rotate:x 0deg;scale:1}
     }
+    /* the grid floor drifts slower than the page, so the hero gains depth
+       as you scroll. translate is used so it does not touch the rotateX. */
+    .hero::before{
+      animation:floorDrift linear both;
+      animation-timeline:view();
+      animation-range:cover;
+    }
+    @keyframes floorDrift{
+      from{translate:0 0;opacity:1}
+      to{translate:0 -90px;opacity:.35}
+    }
   }
 }
 
 @media(max-width:900px){
   .hero-grid,.grid-2,.price-box{grid-template-columns:1fr}
-  .grid-3,.steps{grid-template-columns:1fr}
+  .grid-3,.steps,.compare{grid-template-columns:1fr}
+  .col.featured{transform:none}
   .price-side{border-inline-start:0;border-top:1px solid var(--line)}
   /* straighten the hero card once it is full width */
   .hero .card{transform:none;box-shadow:0 24px 48px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.09)}
@@ -396,6 +454,7 @@ section > .wrap{perspective:1300px}
       <a href="#services">מה כולל</a>
       <a href="#how">איך זה עובד</a>
       <a href="#principles">עקרונות</a>
+      <a href="#compare">השוואה</a>
       <a href="#price">מחיר</a>
       <a href="#faq">שאלות</a>
     </nav>
@@ -533,6 +592,48 @@ section > .wrap{perspective:1300px}
   </div>
 </section>
 
+<section id="compare">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">השוואה</div>
+      <h2>שלוש דרכים לנהל את הפרסום שלכם</h2>
+      <p>לכל אחת מהן יש מקום, והיא נכונה לעסק אחר. הנה התמונה המלאה, כולל המקרים שבהם הליווי הוא לא הבחירה הנכונה עבורכם.</p>
+    </div>
+    <div class="compare">
+      <div class="card col hoverable reveal">
+        <h3>לעשות לבד</h3>
+        <div class="col-cost">עלות: רק תקציב המדיה</div>
+        <ul class="col-list">
+          <li>שליטה מלאה, בלי לשלם לאף אחד</li>
+          <li class="minus">הלמידה לוקחת חודשים, והטעויות נשרפות מהתקציב</li>
+          <li class="minus">קשה לדעת אם התוצאה סבירה כשאין לכם עם מה להשוות</li>
+        </ul>
+      </div>
+
+      <div class="card col hoverable reveal">
+        <h3>מנהל קמפיינים חיצוני</h3>
+        <div class="col-cost">עלות: ריטיינר חודשי קבוע</div>
+        <ul class="col-list">
+          <li>יורד לכם מהראש לגמרי, מישהו אחר מבצע</li>
+          <li class="minus">משלמים גם בחודשים שבהם כמעט לא נגעו בחשבון</li>
+          <li class="minus">נשארים תלויים, ובדרך כלל בלי להבין מה קורה בפנים</li>
+        </ul>
+      </div>
+
+      <div class="card col featured hoverable reveal">
+        <span class="col-badge">המסלול הזה</span>
+        <h3>ליווי אישי</h3>
+        <div class="col-cost">עלות: 350 ₪ לשעה, רק כשצריך</div>
+        <ul class="col-list">
+          <li>אתם מבינים את החשבון ולא רק מקבלים דוח בסוף החודש</li>
+          <li>משלמים לפי צורך, בלי ריטיינר ובלי התחייבות</li>
+          <li class="minus">דורש מכם זמן ומעורבות. אם אין לכם את זה, מנהל קמפיינים יתאים לכם יותר</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="price">
   <div class="wrap">
     <div class="section-head reveal">
@@ -638,6 +739,41 @@ section > .wrap{perspective:1300px}
 </section>
 
 </main>
+
+<script>
+/* Pointer-tracking 3D tilt. Everything below is an enhancement:
+   with the script blocked the cards still tilt to the static angle
+   defined in the CSS, so nothing depends on it. */
+(function(){
+  if(!window.matchMedia) return;
+  if(!matchMedia('(hover:hover)').matches) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+
+  var TILT = 10;
+
+  /* Pointer events are already coalesced to one per frame, and the four
+     custom properties below only feed a transform and a gradient, so this
+     writes straight through with no rAF and no layout work. */
+  document.querySelectorAll('.card.hoverable').forEach(function(card){
+    card.addEventListener('pointermove', function(e){
+      var r = card.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width;
+      var py = (e.clientY - r.top) / r.height;
+      var s = card.style;
+      s.setProperty('--rx', ((0.5 - py) * TILT * 2).toFixed(2) + 'deg');
+      s.setProperty('--ry', ((px - 0.5) * TILT * 2).toFixed(2) + 'deg');
+      s.setProperty('--mx', (px * 100).toFixed(1) + '%');
+      s.setProperty('--my', (py * 100).toFixed(1) + '%');
+    }, {passive:true});
+
+    card.addEventListener('pointerleave', function(){
+      var s = card.style;
+      s.removeProperty('--rx'); s.removeProperty('--ry');
+      s.removeProperty('--mx'); s.removeProperty('--my');
+    }, {passive:true});
+  });
+})();
+</script>
 
 <footer>
   <div class="wrap">
